@@ -11,10 +11,10 @@ namespace Consumer
     {
         private readonly HttpClient _httpClient;
 
-        public StudentApiClient()
+        public StudentApiClient(Uri? uri = null)
         {
             // TODO: Replace with DI
-            _httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:5126/") };
+            _httpClient = new HttpClient { BaseAddress = uri ?? new Uri("http://localhost:5126/") };
         }
 
         public async Task<Student?> GetStudentById(int studentId)

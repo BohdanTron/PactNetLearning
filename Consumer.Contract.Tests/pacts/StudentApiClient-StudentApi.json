@@ -1,0 +1,56 @@
+{
+  "consumer": {
+    "name": "StudentApiClient"
+  },
+  "interactions": [
+    {
+      "description": "a request to get a student",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "student with id 10 exists"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/json"
+          ]
+        },
+        "method": "GET",
+        "path": "/students/10"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "address": "1235, 57th Street, New York, USA",
+            "firstName": "Lars",
+            "id": 10,
+            "lastName": "Ulrich"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.4.23",
+      "models": "1.2.5"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "StudentApi"
+  }
+}
