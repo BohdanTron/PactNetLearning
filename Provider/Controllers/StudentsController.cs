@@ -34,9 +34,7 @@ namespace Provider.Controllers
             await _eventPublisher.Publish(new StudentCreatedEvent
             {
                 StudentId = createdStudent.Id,
-                Address = createdStudent.Address,
                 Gender = createdStudent.Gender,
-                StandardId = createdStudent.Standard,
                 FirstName = createdStudent.FirstName,
                 LastName = createdStudent.LastName
             }, "student-created");

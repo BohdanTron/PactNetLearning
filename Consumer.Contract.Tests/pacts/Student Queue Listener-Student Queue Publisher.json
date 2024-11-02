@@ -2,39 +2,17 @@
   "consumer": {
     "name": "Student Queue Listener"
   },
-  "interactions": [
+  "messages": [
     {
       "contents": {
-        "content": {
-          "address": null,
-          "firstName": "James",
-          "gender": "male",
-          "lastName": "Hetfield",
-          "standardId": 1,
-          "studentId": 10
-        },
-        "contentType": "application/json",
-        "encoded": false
+        "firstName": "James",
+        "gender": "male",
+        "lastName": "Hetfield",
+        "studentId": 10
       },
-      "description": "a create student",
+      "description": "a created student event",
       "matchingRules": {
         "body": {
-          "$.address": {
-            "combine": "AND",
-            "matchers": [
-              {
-                "match": "null"
-              }
-            ]
-          },
-          "$.standardId": {
-            "combine": "AND",
-            "matchers": [
-              {
-                "match": "integer"
-              }
-            ]
-          },
           "$.studentId": {
             "combine": "AND",
             "matchers": [
@@ -45,13 +23,9 @@
           }
         }
       },
-      "pending": false,
-      "providerStates": [
-        {
-          "name": "a student is pushed to the queue"
-        }
-      ],
-      "type": "Asynchronous/Messages"
+      "metadata": {
+        "contentType": "application/json"
+      }
     }
   ],
   "metadata": {

@@ -9,11 +9,11 @@ namespace Consumer.Contract.Tests
 {
     public class StudentQueueListenerTests
     {
-        private readonly IMessagePactBuilderV4 _messagePactBuilder;
+        private readonly IMessagePactBuilderV3 _messagePactBuilder;
 
         public StudentQueueListenerTests(ITestOutputHelper output)
         {
-            _messagePactBuilder = Pact.V4("Student Queue Listener", "Student Queue Publisher", new PactConfig
+            _messagePactBuilder = Pact.V3("Student Queue Listener", "Student Queue Publisher", new PactConfig
             {
                 PactDir = Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.FullName + "/pacts",
                 DefaultJsonSettings = new JsonSerializerOptions
@@ -29,7 +29,7 @@ namespace Consumer.Contract.Tests
         public void ReceiveStudentCreatedEvent()
         {
             _messagePactBuilder
-                .ExpectsToReceive("a create student")
+                .ExpectsToReceive("a created student event")
                 .Given("a student is pushed to the queue")
                     .WithJsonContent(new
                     {
@@ -37,8 +37,6 @@ namespace Consumer.Contract.Tests
                         FirstName = "James",
                         LastName = "Hetfield",
                         Gender = "male",
-                        Address = Match.Null(),
-                        StandardId = Match.Integer(1),
                     })
                 .Verify<StudentCreatedEvent>(message =>
                 {
@@ -47,9 +45,7 @@ namespace Consumer.Contract.Tests
                         StudentId = 10,
                         FirstName = "James",
                         LastName = "Hetfield",
-                        //Address = "1234, 56th Street, San Francisco, USA",
                         Gender = "male",
-                        StandardId = 1
                     });
                 });
         }

@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MessageBroker;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Provider.Contract.Tests.Fakes;
 using Provider.Contract.Tests.Middlewares;
 
 namespace Provider.Contract.Tests
@@ -16,6 +19,8 @@ namespace Provider.Contract.Tests
                 .ConfigureServices();
 
             builder.WebHost.UseUrls(ServerUri.ToString());
+
+            builder.Services.AddSingleton<IEventPublisher, EventPublisherFake>();
 
             _server = builder.Build();
 
