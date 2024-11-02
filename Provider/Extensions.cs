@@ -1,22 +1,28 @@
-﻿namespace Provider
+﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Provider.Controllers;
+
+namespace Provider
 {
     public static class Extensions
     {
-        public static void ConfigureServices(this IServiceCollection services)
+        public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
         {
-            // Add services to the container
-            services.AddControllers();
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            builder.Services.AddControllers()
+                .PartManager
+                .ApplicationParts
+                .Add(new AssemblyPart(typeof(StudentsController).Assembly));
 
-            // Register application services
-            services.AddSingleton<IStudentRepository, StudentRepository>();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSingleton<IStudentRepository, StudentRepository>();
+
+            return builder;
         }
 
-        public static void Configure(this WebApplication app, IWebHostEnvironment env)
+        public static IApplicationBuilder Configure(this WebApplication app)
         {
-            // Configure the HTTP request pipeline
-            if (env.IsDevelopment())
+            if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
@@ -24,12 +30,11 @@
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
             app.UseAuthorization();
 
             app.MapControllers();
 
-            //app.UseEndpoints(e => e.MapControllers());
+            return app;
         }
     }
 }
