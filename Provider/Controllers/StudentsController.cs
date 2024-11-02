@@ -16,7 +16,7 @@ namespace Provider.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var student = _studentRepository.GetStudentById(id);
+            var student = _studentRepository.GetById(id);
 
             return student is null ? NotFound() : Ok(student);
         }

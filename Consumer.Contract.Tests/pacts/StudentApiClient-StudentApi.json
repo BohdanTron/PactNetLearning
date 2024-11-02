@@ -23,10 +23,11 @@
       "response": {
         "body": {
           "content": {
-            "address": "1235, 57th Street, New York, USA",
-            "firstName": "Lars",
+            "address": "1234, 56th Street, San Francisco, USA",
+            "firstName": "James",
+            "gender": "male",
             "id": 10,
-            "lastName": "Ulrich"
+            "lastName": "Hetfield"
           },
           "contentType": "application/json",
           "encoded": false

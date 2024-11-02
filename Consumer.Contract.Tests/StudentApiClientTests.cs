@@ -15,7 +15,7 @@ namespace Consumer.Contract.Tests
             _pactBuilder = Pact.V4("StudentApiClient", "StudentApi", new PactConfig
             {
                 PactDir = Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.FullName + "/pacts",
-                Outputters = [ new XunitOutput(output)],
+                Outputters = [new XunitOutput(output)],
                 LogLevel = PactLogLevel.Debug
             }).WithHttpInteractions();
         }
@@ -24,7 +24,7 @@ namespace Consumer.Contract.Tests
         public async Task GetById_Exist()
         {
             // Arrange
-            var expectedStudent = new  { id = 10, firstName = "Lars", lastName = "Ulrich", address = "1235, 57th Street, New York, USA" };
+            var expectedStudent = new { id = 10, firstName = "James", lastName = "Hetfield", address = "1234, 56th Street, San Francisco, USA", gender = "male" };
 
             _pactBuilder
                 .UponReceiving("a request to get a student")

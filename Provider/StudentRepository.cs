@@ -2,7 +2,8 @@
 {
     public interface IStudentRepository
     {
-        Student? GetStudentById(int id);
+        Student? GetById(int id);
+        void Add(Student student);
     }
 
     public class StudentRepository : IStudentRepository
@@ -19,9 +20,14 @@
             }
         ];
 
-        public Student? GetStudentById(int id)
+        public Student? GetById(int id)
         {
             return _students.FirstOrDefault(x => x.Id == id);
+        }
+
+        public void Add(Student student)
+        {
+            _students.Add(student);
         }
     }
 }
