@@ -1,0 +1,69 @@
+{
+  "consumer": {
+    "name": "Student Queue Listener"
+  },
+  "interactions": [
+    {
+      "contents": {
+        "content": {
+          "address": null,
+          "firstName": "James",
+          "gender": "male",
+          "lastName": "Hetfield",
+          "standardId": 1,
+          "studentId": 10
+        },
+        "contentType": "application/json",
+        "encoded": false
+      },
+      "description": "a create student",
+      "matchingRules": {
+        "body": {
+          "$.address": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "null"
+              }
+            ]
+          },
+          "$.standardId": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "integer"
+              }
+            ]
+          },
+          "$.studentId": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "integer"
+              }
+            ]
+          }
+        }
+      },
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a student is pushed to the queue"
+        }
+      ],
+      "type": "Asynchronous/Messages"
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.4.23",
+      "models": "1.2.5"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "Student Queue Publisher"
+  }
+}
