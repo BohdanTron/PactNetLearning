@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
+﻿using MessageBroker;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Provider.Controllers;
 
 namespace Provider
@@ -16,6 +17,7 @@ namespace Provider
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddSingleton<IStudentRepository, StudentRepository>();
+            builder.Services.AddSingleton<IEventPublisher, EventPublisher>();
 
             return builder;
         }
