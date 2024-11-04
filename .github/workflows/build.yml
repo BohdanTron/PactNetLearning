@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ "master" ]
 
+
+env:
+  PACT_BROKER_BASE_URL: ${{ secrets.PACTFLOW_BASE_URL }}
+  PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
+
+
 jobs:
   build:
 
@@ -25,23 +31,18 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
 
-    - name: Test
+    - name: Test Consumer
       run: dotnet test ./Consumer.Contract.Tests/Consumer.Contract.Tests.csproj --no-build --configuration Release --verbosity normal 
     
-    - name: Publish Pacts
+    - name: Publish Pacts for Consumer
       env:
-        PACT_BROKER_BASE_URL: ${{ secrets.PACTFLOW_BASE_URL }}
-        PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
       run: |
         docker run --rm \
           -v $(pwd)/Consumer.Contract.Tests/pacts:/pacts \
           pactfoundation/pact-cli:latest \
           publish /pacts --consumer-app-version $(git rev-parse --short HEAD) --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
     
-    - name: Can I Deploy?
-      env:
-        PACT_BROKER_BASE_URL: ${{ secrets.PACTFLOW_BASE_URL }}
-        PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
+    - name: Can I Deploy (Consumer)?
       run: |
         docker run --rm \
           pactfoundation/pact-cli:latest \
