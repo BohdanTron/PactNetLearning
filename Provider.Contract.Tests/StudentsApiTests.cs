@@ -33,11 +33,16 @@ namespace Provider.Contract.Tests
             var pactPath = Path.Combine("..", "..", "..", "..", "Consumer.Contract.Tests", "pacts", "StudentApiClient-StudentApi.json");
 
             // Act / Assert
-            var pactVerifier = new PactVerifier("Students API", pactConfig);
+            var pactVerifier = new PactVerifier("StudentApi", pactConfig);
 
             pactVerifier
                 .WithHttpEndpoint(_fixture.ServerUri)
-                .WithFileSource(new FileInfo(pactPath))
+                //.WithFileSource(new FileInfo(pactPath))
+                .WithPactBrokerSource(new Uri("https://btron.pactflow.io"), options =>
+                {
+                    options.TokenAuthentication("5U40qcCjDyMyqmLQN3IbYg");
+                    options.PublishResults(true, "1.0.0");
+                })
                 .WithProviderStateUrl(new Uri(_fixture.ServerUri, "/provider-states"))
                 .Verify();
         }
