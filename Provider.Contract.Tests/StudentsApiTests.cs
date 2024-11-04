@@ -37,12 +37,12 @@ namespace Provider.Contract.Tests
 
             pactVerifier
                 .WithHttpEndpoint(_fixture.ServerUri)
-                .WithFileSource(new FileInfo(pactPath))
-                //.WithPactBrokerSource(new Uri("https://btron.pactflow.io"), options =>
-                //{
-                //    options.TokenAuthentication("5U40qcCjDyMyqmLQN3IbYg");
-                //    options.PublishResults(true, "1.0.0");
-                //})
+                //.WithFileSource(new FileInfo(pactPath))
+                .WithPactBrokerSource(new Uri("https://btron.pactflow.io"), options =>
+                {
+                    options.TokenAuthentication("5U40qcCjDyMyqmLQN3IbYg");
+                    options.PublishResults(true, "1.0.1");
+                })
                 .WithProviderStateUrl(new Uri(_fixture.ServerUri, "/provider-states"))
                 .Verify();
         }
