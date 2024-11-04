@@ -30,7 +30,6 @@ namespace Consumer.Contract.Tests
         {
             await _messagePactBuilder
                 .ExpectsToReceive("an event indicating that a student has been created")
-                    //.Given("a student is pushed to the queue")
                     .WithJsonContent(new
                     {
                         Id = Match.Integer(10)
