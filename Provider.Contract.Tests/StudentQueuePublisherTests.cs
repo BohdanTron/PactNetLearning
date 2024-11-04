@@ -55,9 +55,9 @@ namespace Provider.Contract.Tests
                             .WithContent(() =>
                                 new StudentCreatedEvent
                                 {
-                                    StudentId = 10,
-                                    FirstName = "James",
-                                    LastName = "Hetfield",
+                                    StudentId = 20,
+                                    FirstName = "Lars",
+                                    LastName = "Ulrich",
                                     Gender = "male"
                                 }
                             );

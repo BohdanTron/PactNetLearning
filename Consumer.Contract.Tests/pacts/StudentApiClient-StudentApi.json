@@ -37,6 +37,18 @@
             "application/json; charset=utf-8"
           ]
         },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
         "status": 200
       },
       "type": "Synchronous/HTTP"

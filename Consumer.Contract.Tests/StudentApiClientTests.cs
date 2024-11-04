@@ -1,6 +1,7 @@
 using System.Net;
 using FluentAssertions;
 using PactNet;
+using PactNet.Matchers;
 using PactNet.Output.Xunit;
 using Xunit.Abstractions;
 
@@ -34,7 +35,7 @@ namespace Consumer.Contract.Tests
                 .WillRespond()
                 .WithStatus(HttpStatusCode.OK)
                     .WithHeader("Content-Type", "application/json; charset=utf-8")
-                    .WithJsonBody(expectedStudent);
+                    .WithJsonBody(new TypeMatcher(expectedStudent));
 
             await _pactBuilder.VerifyAsync(async ctx =>
             {
