@@ -52,6 +52,30 @@
         "status": 200
       },
       "type": "Synchronous/HTTP"
+    },
+    {
+      "contents": {
+        "content": {
+          "id": 10
+        },
+        "contentType": "application/json",
+        "encoded": false
+      },
+      "description": "an event indicating that a student has been created",
+      "matchingRules": {
+        "body": {
+          "$.id": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "integer"
+              }
+            ]
+          }
+        }
+      },
+      "pending": false,
+      "type": "Asynchronous/Messages"
     }
   ],
   "metadata": {

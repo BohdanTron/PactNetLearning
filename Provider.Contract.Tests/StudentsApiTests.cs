@@ -1,3 +1,4 @@
+using System.Text.Json;
 using PactNet;
 using PactNet.Infrastructure.Outputters;
 using PactNet.Output.Xunit;
@@ -8,6 +9,12 @@ namespace Provider.Contract.Tests
 {
     public class StudentsApiTests : IClassFixture<StudentsApiFixture>
     {
+        private static readonly JsonSerializerOptions Options = new()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true
+        };
+
         private readonly StudentsApiFixture _fixture;
         private readonly ITestOutputHelper _output;
 
@@ -37,12 +44,16 @@ namespace Provider.Contract.Tests
 
             pactVerifier
                 .WithHttpEndpoint(_fixture.ServerUri)
-                //.WithFileSource(new FileInfo(pactPath))
-                .WithPactBrokerSource(new Uri("https://btron.pactflow.io"), options =>
+                .WithMessages(scenarios =>
                 {
-                    options.TokenAuthentication("5U40qcCjDyMyqmLQN3IbYg");
-                    options.PublishResults(true, "1.0.1");
-                })
+                    scenarios.Add("an event indicating that a student has been created", () => new StudentCreatedEvent(10));
+                }, Options)
+                .WithFileSource(new FileInfo(pactPath))
+                //.WithPactBrokerSource(new Uri("https://btron.pactflow.io"), options =>
+                //{
+                //    options.TokenAuthentication("5U40qcCjDyMyqmLQN3IbYg");
+                //    options.PublishResults(true, "1.0.1");
+                //})
                 .WithProviderStateUrl(new Uri(_fixture.ServerUri, "/provider-states"))
                 .Verify();
         }

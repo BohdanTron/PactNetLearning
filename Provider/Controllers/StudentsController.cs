@@ -31,13 +31,7 @@ namespace Provider.Controllers
         {
             var createdStudent = _studentRepository.Add(student);
 
-            await _eventPublisher.Publish(new StudentCreatedEvent
-            {
-                StudentId = createdStudent.Id,
-                Gender = createdStudent.Gender,
-                FirstName = createdStudent.FirstName,
-                LastName = createdStudent.LastName
-            }, "student-created");
+            await _eventPublisher.Publish(new StudentCreatedEvent(createdStudent.Id), "student-created");
 
             return Ok();
         }

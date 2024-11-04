@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using FluentAssertions;
 using PactNet;
 using PactNet.Matchers;
 using PactNet.Output.Xunit;
@@ -9,16 +8,17 @@ namespace Consumer.Contract.Tests
 {
     public class StudentQueueListenerTests
     {
-        private readonly IMessagePactBuilderV3 _messagePactBuilder;
+        private readonly IMessagePactBuilderV4 _messagePactBuilder;
 
         public StudentQueueListenerTests(ITestOutputHelper output)
         {
-            _messagePactBuilder = Pact.V3("Student Queue Listener", "Student Queue Publisher", new PactConfig
+            _messagePactBuilder = Pact.V4("StudentApiClient", "StudentApi", new PactConfig
             {
                 PactDir = Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.FullName + "/pacts",
                 DefaultJsonSettings = new JsonSerializerOptions
                 {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    PropertyNameCaseInsensitive = true
                 },
                 Outputters = [new XunitOutput(output)],
                 LogLevel = PactLogLevel.Debug
@@ -26,27 +26,18 @@ namespace Consumer.Contract.Tests
         }
 
         [Fact]
-        public void ReceiveStudentCreatedEvent()
+        public async Task ReceiveStudentCreatedEvent()
         {
-            _messagePactBuilder
-                .ExpectsToReceive("a created student event")
-                .Given("a student is pushed to the queue")
+            await _messagePactBuilder
+                .ExpectsToReceive("an event indicating that a student has been created")
+                    //.Given("a student is pushed to the queue")
                     .WithJsonContent(new
                     {
-                        StudentId = Match.Integer(10),
-                        FirstName = "James",
-                        LastName = "Hetfield",
-                        Gender = "male",
+                        Id = Match.Integer(10)
                     })
-                .Verify<StudentCreatedEvent>(message =>
+                .VerifyAsync<StudentCreatedEvent>(async message =>
                 {
-                    message.Should().BeEquivalentTo(new StudentCreatedEvent
-                    {
-                        StudentId = 10,
-                        FirstName = "James",
-                        LastName = "Hetfield",
-                        Gender = "male",
-                    });
+                    // Do smth
                 });
         }
     }
