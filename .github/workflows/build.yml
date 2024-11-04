@@ -31,10 +31,11 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
 
-    - name: Test Consumer
+    # Run consumer tests
+    - name: Run Consumer tests
       run: dotnet test ./Consumer.Contract.Tests/Consumer.Contract.Tests.csproj --no-build --configuration Release --verbosity normal 
     
-    - name: Publish Pacts for Consumer
+    - name: Publish Consumer tests to PactFlow
       run: |
         docker run --rm \
           -v $(pwd)/Consumer.Contract.Tests/pacts:/pacts \
@@ -47,4 +48,18 @@ jobs:
           pactfoundation/pact-cli:latest \
           broker can-i-deploy --pacticipant StudentApiClient --version $(git rev-parse --short HEAD) --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
 
+    # Run provider tests
+    - name: Run Provider tests
+      run: dotnet test ./Provider.Contract.Tests/Provider.Contract.Tests.csproj --no-build --configuration Release --verbosity normal 
+
+    - name: Publish Provider tests to PactFlow
+      run: |
+        docker run --rm \
+          pactfoundation/pact-cli:latest \
+          broker publish-verification-results \
+          --provider StudentApi \
+          --provider-app-version $(git rev-parse --short HEAD) \
+          --success \
+          --broker-base-url $PACT_BROKER_URL \
+          --broker-token $PACT_BROKER_TOKEN
 
