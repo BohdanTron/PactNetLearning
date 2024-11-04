@@ -35,7 +35,6 @@ jobs:
       run: dotnet test ./Consumer.Contract.Tests/Consumer.Contract.Tests.csproj --no-build --configuration Release --verbosity normal 
     
     - name: Publish Pacts for Consumer
-      env:
       run: |
         docker run --rm \
           -v $(pwd)/Consumer.Contract.Tests/pacts:/pacts \
