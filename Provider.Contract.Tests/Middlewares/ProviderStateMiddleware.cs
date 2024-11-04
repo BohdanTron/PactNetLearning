@@ -56,9 +56,9 @@ namespace Provider.Contract.Tests.Middlewares
             var student = new Student
             {
                 Id = 10,
-                FirstName = "James",
-                LastName = "Hetfield",
-                Address = "1234, 56th Street, San Francisco, USA",
+                FirstName = "Lars",
+                LastName = "Ulrich",
+                Address = "1234, 56th Street, New York, USA",
                 Gender = "male"
             };
 
