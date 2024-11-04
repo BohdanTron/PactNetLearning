@@ -31,7 +31,7 @@ jobs:
 
     - name: Publish Pacts
       env:
-        PACT_BROKER_BASE_URL: ${{ secrets.PACT_BROKER_BASE_URL }}
+        PACT_BROKER_BASE_URL: ${{ secrets.PACTFLOW_BASE_URL }}
         PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
       run: |
         docker run --rm \
