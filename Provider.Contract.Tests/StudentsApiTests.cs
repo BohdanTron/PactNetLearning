@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 using PactNet;
 using PactNet.Infrastructure.Outputters;
 using PactNet.Output.Xunit;
@@ -37,7 +38,12 @@ namespace Provider.Contract.Tests
                 LogLevel = PactLogLevel.Debug
             };
 
-            var pactPath = Path.Combine("..", "..", "..", "..", "Consumer.Contract.Tests", "pacts", "StudentApiClient-StudentApi.json");
+            var configuration = new ConfigurationBuilder()
+                .AddUserSecrets<StudentsApiTests>()
+                .Build();
+
+            var pactBrokerUrl = configuration["PactBroker:Url"]!;
+            var pactBrokerToken = configuration["PactBroker:Token"];
 
             // Act / Assert
             var pactVerifier = new PactVerifier("StudentApi", pactConfig);
@@ -48,12 +54,10 @@ namespace Provider.Contract.Tests
                 {
                     scenarios.Add("an event indicating that a student has been created", () => new StudentCreatedEvent(10));
                 }, Options)
-                .WithFileSource(new FileInfo(pactPath))
-                //.WithPactBrokerSource(new Uri("https://btron.pactflow.io"), options =>
-                //{
-                //    options.TokenAuthentication("5U40qcCjDyMyqmLQN3IbYg");
-                //    options.PublishResults(true, "1.0.1");
-                //})
+                .WithPactBrokerSource(new Uri(pactBrokerUrl), options =>
+                {
+                    options.TokenAuthentication(pactBrokerToken);
+                })
                 .WithProviderStateUrl(new Uri(_fixture.ServerUri, "/provider-states"))
                 .Verify();
         }
