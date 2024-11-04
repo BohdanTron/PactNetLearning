@@ -42,8 +42,8 @@ namespace Provider.Contract.Tests
                 .AddUserSecrets<StudentsApiTests>()
                 .Build();
 
-            var pactBrokerUrl = configuration["PactBroker:Url"]!;
-            var pactBrokerToken = configuration["PactBroker:Token"];
+            var pactBrokerUrl = configuration["PactBroker:Url"] ?? Environment.GetEnvironmentVariable("PACT_BROKER_BASE_URL");
+            var pactBrokerToken = configuration["PactBroker:Token"] ?? Environment.GetEnvironmentVariable("PACT_BROKER_TOKEN");
 
             // Act / Assert
             var pactVerifier = new PactVerifier("StudentApi", pactConfig);
