@@ -58,5 +58,5 @@ jobs:
       run: |
         docker run --rm \
           pactfoundation/pact-cli:latest \
-          broker can-i-deploy --pacticipant StudentApi --version $(git rev-parse --short HEAD) --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
+          broker can-i-deploy --pacticipant StudentApi --version $GIT_COMMIT --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
 
