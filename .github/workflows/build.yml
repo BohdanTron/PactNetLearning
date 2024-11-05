@@ -53,3 +53,10 @@ jobs:
     # Run provider tests
     - name: Run Provider tests
       run: dotnet test ./Provider.Contract.Tests/Provider.Contract.Tests.csproj --no-build --configuration Release --verbosity normal 
+
+    - name: Can I Deploy (Provider)?
+      run: |
+        docker run --rm \
+          pactfoundation/pact-cli:latest \
+          broker can-i-deploy --pacticipant StudentApi --version $(git rev-parse --short HEAD) --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
+
