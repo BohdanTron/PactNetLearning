@@ -13,7 +13,7 @@ env:
   PACT_BROKER_PUBLISH_VERIFICATIONS_RESULT: true
   GIT_COMMIT: ${{ github.sha }}
   BRANCH_NAME: ${{ github.ref_name }}
-
+  BUILD_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
 jobs:
   build:
