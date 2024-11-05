@@ -47,7 +47,7 @@ namespace Provider.Contract.Tests
 
             var shouldPublishResults = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PACT_BROKER_PUBLISH_VERIFICATIONS_RESULT"));
             var version = Environment.GetEnvironmentVariable("GIT_COMMIT");
-            string branch = Environment.GetEnvironmentVariable("GIT_BRANCH");
+            var branch = Environment.GetEnvironmentVariable("BRANCH_NAME");
 
             // TODO: Add build URI
 
