@@ -10,6 +10,8 @@ on:
 env:
   PACT_BROKER_BASE_URL: ${{ secrets.PACTFLOW_BASE_URL }}
   PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
+  PACT_BROKER_PUBLISH_VERIFICATIONS_RESULT: true
+  GIT_COMMIT: ${{ github.sha }}
 
 
 jobs:
@@ -51,15 +53,3 @@ jobs:
     # Run provider tests
     - name: Run Provider tests
       run: dotnet test ./Provider.Contract.Tests/Provider.Contract.Tests.csproj --no-build --configuration Release --verbosity normal 
-
-    - name: Publish Provider tests to PactFlow
-      run: |
-        docker run --rm \
-          pactfoundation/pact-cli:latest \
-          broker publish-verification-results \
-          --provider StudentApi \
-          --provider-app-version $(git rev-parse --short HEAD) \
-          --success \
-          --broker-base-url $PACT_BROKER_URL \
-          --broker-token $PACT_BROKER_TOKEN
-
