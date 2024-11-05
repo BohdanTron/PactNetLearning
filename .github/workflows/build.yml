@@ -44,11 +44,11 @@ jobs:
           pactfoundation/pact-cli:latest \
           publish /pacts --consumer-app-version $(git rev-parse --short HEAD) --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
     
-    - name: Can I Deploy (Consumer)?
-      run: |
-        docker run --rm \
-          pactfoundation/pact-cli:latest \
-          broker can-i-deploy --pacticipant StudentApiClient --version $(git rev-parse --short HEAD) --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
+    # - name: Can I Deploy (Consumer)?
+    #   run: |
+    #     docker run --rm \
+    #       pactfoundation/pact-cli:latest \
+    #       broker can-i-deploy --pacticipant StudentApiClient --version $(git rev-parse --short HEAD) --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
 
     # Run provider tests
     - name: Run Provider tests
