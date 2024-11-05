@@ -12,6 +12,7 @@ env:
   PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
   PACT_BROKER_PUBLISH_VERIFICATIONS_RESULT: true
   GIT_COMMIT: ${{ github.sha }}
+  BRANCH_NAME: ${{ github.ref_name }}
 
 
 jobs:
@@ -42,7 +43,7 @@ jobs:
         docker run --rm \
           -v $(pwd)/Consumer.Contract.Tests/pacts:/pacts \
           pactfoundation/pact-cli:latest \
-          publish /pacts --consumer-app-version $(git rev-parse --short HEAD) --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
+          publish /pacts --consumer-app-version $(git rev-parse --short HEAD) --branch $BRANCH_NAME --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
     
     - name: Can I Deploy (Consumer)?
       run: |
