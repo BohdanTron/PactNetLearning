@@ -47,6 +47,9 @@ namespace Provider.Contract.Tests
 
             var shouldPublishResults = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PACT_BROKER_PUBLISH_VERIFICATIONS_RESULT"));
             var version = Environment.GetEnvironmentVariable("GIT_COMMIT");
+            string branch = Environment.GetEnvironmentVariable("GIT_BRANCH");
+
+            // TODO: Add build URI
 
             // Act / Assert
             var pactVerifier = new PactVerifier("StudentApi", pactConfig);
@@ -60,7 +63,10 @@ namespace Provider.Contract.Tests
                 .WithPactBrokerSource(new Uri(pactBrokerUrl), options =>
                 {
                     options.TokenAuthentication(pactBrokerToken);
-                    options.PublishResults(shouldPublishResults, version);
+                    options.PublishResults(shouldPublishResults, version, publishOptions =>
+                    {
+                        publishOptions.ProviderBranch(branch);
+                    });
                 })
                 .WithProviderStateUrl(new Uri(_fixture.ServerUri, "/provider-states"))
                 .Verify();
