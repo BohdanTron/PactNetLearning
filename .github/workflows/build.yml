@@ -11,7 +11,7 @@ env:
   PACT_BROKER_BASE_URL: ${{ secrets.PACTFLOW_BASE_URL }}
   PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
   PACT_BROKER_PUBLISH_VERIFICATIONS_RESULT: true
-  GIT_COMMIT: ${{ github.sha }}
+  GIT_COMMIT: ${{ github.sha }} | head -c 7
 
 
 jobs:
