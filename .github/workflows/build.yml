@@ -38,12 +38,17 @@ jobs:
     - name: Run Consumer tests
       run: dotnet test ./Consumer.Contract.Tests/Consumer.Contract.Tests.csproj --no-build --configuration Release --verbosity normal 
     
-    - name: Publish Consumer tests to PactFlow
-      run: |
-        docker run --rm \
-          -v $(pwd)/Consumer.Contract.Tests/pacts:/pacts \
-          pactfoundation/pact-cli:latest \
-          publish /pacts --consumer-app-version $(git rev-parse --short HEAD) --branch $BRANCH_NAME --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
+      - name: Publish Consumer tests to PactFlow
+        run: |
+          docker run --rm \
+            -v $(pwd)/Consumer.Contract.Tests/pacts:/pacts \
+            pactfoundation/pact-cli:latest \
+            publish /pacts \
+            --consumer-app-version $GIT_COMMIT \
+            --branch $BRANCH_NAME \
+            --build-url $BUILD_URL \
+            --broker-base-url $PACT_BROKER_BASE_URL \
+            --broker-token $PACT_BROKER_TOKEN
     
     - name: Can I Deploy (Consumer)?
       run: |
