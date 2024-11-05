@@ -1,0 +1,45 @@
+trigger:
+  - master
+
+variables:
+  PACT_BROKER_BASE_URL: $(PACTFLOW_BASE_URL)
+  PACT_BROKER_TOKEN: $(PACTFLOW_TOKEN)
+  PACT_BROKER_PUBLISH_VERIFICATIONS_RESULT: true
+  GIT_COMMIT: $(Build.SourceVersion)
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET SDK 8.0.x'
+    inputs:
+      version: '8.0.x'
+
+  - script: dotnet restore
+    displayName: 'Restore dependencies'
+
+  - script: dotnet build --no-restore --configuration Release
+    displayName: 'Build the solution'
+
+  - script: dotnet test ./Consumer.Contract.Tests/Consumer.Contract.Tests.csproj --no-build --configuration Release --verbosity normal
+    displayName: 'Run Consumer tests'
+
+  - script: |
+      docker run --rm \
+        -v $(Build.SourcesDirectory)/Consumer.Contract.Tests/pacts:/pacts \
+        pactfoundation/pact-cli:latest \
+        publish /pacts --consumer-app-version $(Build.SourceVersion) --broker-base-url $(PACT_BROKER_BASE_URL) --broker-token $(PACT_BROKER_TOKEN)
+    displayName: 'Publish Consumer tests to PactFlow'
+
+  - script: |
+      docker run --rm \
+        pactfoundation/pact-cli:latest \
+        broker can-i-deploy --pacticipant StudentApiClient --version $(Build.SourceVersion) --broker-base-url $(PACT_BROKER_BASE_URL) --broker-token $(PACT_BROKER_TOKEN)
+    displayName: 'Can I Deploy (Consumer)?'
+
+  - script: dotnet test ./Provider.Contract.Tests/Provider.Contract.Tests.csproj --no-build --configuration Release --verbosity normal
+    displayName: 'Run Provider tests'
+
+  - script: |
+      docker run --rm \
+        pactfoundation/pact-cli:latest \
+        broker can-i-deploy --pacticipant StudentApi --version $(GIT_COMMIT) --broker-base-url $(PACT_BROKER_BASE_URL) --broker-token $(PACT_BROKER_TOKEN)
+    displayName: 'Can I Deploy (Provider)?'
