@@ -47,7 +47,7 @@ jobs:
           --consumer-app-version $(git rev-parse --short HEAD) \
           --branch $BRANCH_NAME \
           --build-url $BUILD_URL \
-          --to-environment staging \
+          --environment Staging \
           --broker-base-url $PACT_BROKER_BASE_URL \
           --broker-token $PACT_BROKER_TOKEN
     
