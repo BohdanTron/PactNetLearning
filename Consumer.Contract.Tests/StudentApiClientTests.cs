@@ -54,7 +54,7 @@ namespace Consumer.Contract.Tests
         {
             // Arrange
             _pactBuilder
-                .UponReceiving("a request to get a student")
+                .UponReceiving("an unauthorized request to get a student")
                     .Given("no auth token is provided")
                     .WithRequest(HttpMethod.Get, "/students/10")
                 .WillRespond()

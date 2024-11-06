@@ -8,23 +8,6 @@
       "pending": false,
       "providerStates": [
         {
-          "name": "no auth token is provided"
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "path": "/students/10"
-      },
-      "response": {
-        "status": 401
-      },
-      "type": "Synchronous/HTTP"
-    },
-    {
-      "description": "a request to get a student",
-      "pending": false,
-      "providerStates": [
-        {
           "name": "student with id 10 exists"
         }
       ],
@@ -109,6 +92,23 @@
       },
       "pending": false,
       "type": "Asynchronous/Messages"
+    },
+    {
+      "description": "an unauthorized request to get a student",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "no auth token is provided"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/students/10"
+      },
+      "response": {
+        "status": 401
+      },
+      "type": "Synchronous/HTTP"
     }
   ],
   "metadata": {
