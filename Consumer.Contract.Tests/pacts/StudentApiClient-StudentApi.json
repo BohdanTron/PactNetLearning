@@ -15,7 +15,23 @@
         "headers": {
           "Accept": [
             "application/json"
+          ],
+          "Authorization": [
+            "Bearer 2019-01-14T11:34:18.045Z"
           ]
+        },
+        "matchingRules": {
+          "header": {
+            "Authorization": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "Bearer \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z"
+                }
+              ]
+            }
+          }
         },
         "method": "GET",
         "path": "/students/10"

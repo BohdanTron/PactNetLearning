@@ -31,6 +31,7 @@ namespace Consumer.Contract.Tests
                 .UponReceiving("a request to get a student")
                     .Given("student with id 10 exists")
                     .WithRequest(HttpMethod.Get, "/students/10")
+                    .WithHeader("Authorization", Match.Regex("Bearer 2019-01-14T11:34:18.045Z", "Bearer \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z"))
                     .WithHeader("Accept", "application/json")
                 .WillRespond()
                 .WithStatus(HttpStatusCode.OK)

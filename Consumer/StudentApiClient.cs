@@ -21,6 +21,7 @@ namespace Consumer
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, $"/students/{studentId}");
             request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("Authorization", $"Bearer {DateTime.Now:yyyy-MM-ddTHH:mm:ss.fffZ}");
 
             var response = await _httpClient.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
