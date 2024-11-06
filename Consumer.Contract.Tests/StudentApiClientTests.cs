@@ -42,10 +42,32 @@ namespace Consumer.Contract.Tests
             {
                 // Act
                 var apiClient = new StudentApiClient(ctx.MockServerUri);
-                var product = await apiClient.GetStudentById(10);
+                var student = await apiClient.GetStudentById(10);
 
                 // Assert
-                product?.Id.Should().Be(10);
+                student?.Id.Should().Be(10);
+            });
+        }
+
+        [Fact]
+        public async Task GetProduct_MissingAuthHeader()
+        {
+            // Arrange
+            _pactBuilder
+                .UponReceiving("a request to get a student")
+                    .Given("no auth token is provided")
+                    .WithRequest(HttpMethod.Get, "/students/10")
+                .WillRespond()
+                    .WithStatus(HttpStatusCode.Unauthorized);
+
+            await _pactBuilder.VerifyAsync(async ctx =>
+            {
+                // Act
+                var apiClient = new StudentApiClient(ctx.MockServerUri);
+                var student = await apiClient.GetStudentById(10);
+
+                // Assert
+                student.Should().BeNull();
             });
         }
     }

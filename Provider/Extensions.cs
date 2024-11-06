@@ -1,6 +1,7 @@
 ﻿using MessageBroker;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Provider.Controllers;
+using Provider.Middlewares;
 
 namespace Provider
 {
@@ -32,6 +33,7 @@ namespace Provider
 
             app.UseHttpsRedirection();
 
+            app.UseMiddleware<AuthorizationMiddleware>();
             app.UseAuthorization();
 
             app.MapControllers();
