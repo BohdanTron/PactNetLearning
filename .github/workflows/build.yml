@@ -59,7 +59,8 @@ jobs:
     # Run provider tests
     - name: Run Provider tests
       run: dotnet test ./Provider.Contract.Tests/Provider.Contract.Tests.csproj --no-build --configuration Release --verbosity normal 
-      continue-on-error: true
+      # continue-on-error: true
+      if: always()
 
     - name: Can I Deploy (Provider)?
       run: |
