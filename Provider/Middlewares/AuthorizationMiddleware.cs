@@ -14,15 +14,13 @@ namespace Provider.Middlewares
         {
             if (context.Request.Headers.ContainsKey(AuthorizationHeaderKey))
             {
-                var tokenTime = DateTime.Parse(AuthorizationHeader(context.Request));
-
-                if (IsOlderThanOneHour(tokenTime))
+                if (DateTime.TryParse(AuthorizationHeader(context.Request), out _))
                 {
-                    UnauthorizedResponse(context);
+                    await _next(context);
                 }
                 else
                 {
-                    await _next(context);
+                    UnauthorizedResponse(context);
                 }
             }
             else
@@ -37,9 +35,6 @@ namespace Provider.Middlewares
             var match = Regex.Match(authorizationHeader, "Bearer (.*)");
             return match.Groups[1].Value;
         }
-
-        private static bool IsOlderThanOneHour(DateTime tokenTime) => 
-            tokenTime < DateTime.Now.AddHours(-1);
 
         private static void UnauthorizedResponse(HttpContext context)
         {

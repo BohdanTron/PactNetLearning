@@ -19,6 +19,7 @@ namespace Provider.Contract.Tests.Middlewares
             _providerStates = new Dictionary<string, Action>
             {
                 { "student with id 10 exists", Student10Exists },
+                { "no auth token is provided", Student10Exists }
             };
         }
 
