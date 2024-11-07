@@ -1,5 +1,7 @@
 ﻿using MessageBroker;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.Extensions.Azure;
+using Microsoft.OpenApi.Models;
 using Provider.Controllers;
 using Provider.Middlewares;
 
@@ -15,10 +17,44 @@ namespace Provider
                 .Add(new AssemblyPart(typeof(StudentsController).Assembly));
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(option =>
+            {
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        []
+                    }
+                });
+            });
 
             builder.Services.AddSingleton<IStudentRepository, StudentRepository>();
             builder.Services.AddSingleton<IEventPublisher, EventPublisher>();
+
+            builder.Services.AddAzureClients(clientBuilder =>
+            {
+                var connectionString = builder.Configuration.GetConnectionString("EventHubs");
+                clientBuilder.AddEventHubProducerClient(
+                    connectionString,
+                    "my_event_hub");
+            });
 
             return builder;
         }
