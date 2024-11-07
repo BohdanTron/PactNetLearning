@@ -48,11 +48,13 @@ namespace Provider
             builder.Services.AddSingleton<IStudentRepository, StudentRepository>();
             builder.Services.AddSingleton<IEventPublisher, EventPublisher>();
 
+            var realConnection = builder.Configuration.GetConnectionString("EventHubs");
+            var fakeConnection = "Endpoint=sb://fake.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=fake";
+
             builder.Services.AddAzureClients(clientBuilder =>
             {
-                var connectionString = builder.Configuration.GetConnectionString("EventHubs");
                 clientBuilder.AddEventHubProducerClient(
-                    connectionString,
+                    !string.IsNullOrEmpty(realConnection) ? realConnection : fakeConnection,
                     "my_event_hub");
             });
 
