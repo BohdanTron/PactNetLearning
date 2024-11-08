@@ -49,21 +49,58 @@ jobs:
           --build-url $BUILD_URL \
           --broker-base-url $PACT_BROKER_BASE_URL \
           --broker-token $PACT_BROKER_TOKEN
-    
-    - name: Can I Deploy (Consumer)?
+
+    - name: Can I Deploy (Consumer) ?
+      run: |
+          docker run --rm \
+          pactfoundation/pact-cli:latest \
+          broker can-i-deploy \
+          --pacticipant StudentApiClient \
+          --version $(git rev-parse --short HEAD) \
+          --to-environment stage \
+          --broker-base-url $PACT_BROKER_BASE_URL \
+          --broker-token $PACT_BROKER_TOKEN
+
+
+    - name: Record Consumer Deployment in Stage
+      if: success()
       run: |
         docker run --rm \
           pactfoundation/pact-cli:latest \
-          broker can-i-deploy --pacticipant StudentApiClient --version $(git rev-parse --short HEAD) --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
+          broker record-deployment \
+          --pacticipant StudentApiClient \
+          --version $(git rev-parse --short HEAD) \
+          --environment stage \
+          --broker-base-url $PACT_BROKER_BASE_URL \
+          --broker-token $PACT_BROKER_TOKEN
+
 
     # Run provider tests
     - name: Run Provider tests
       run: dotnet test ./Provider.Contract.Tests/Provider.Contract.Tests.csproj --no-build --configuration Release --verbosity normal 
       if: always()
 
-    - name: Can I Deploy (Provider)?
+    - name: Can I Deploy (Provider) ?
+      if: always()
       run: |
         docker run --rm \
           pactfoundation/pact-cli:latest \
-          broker can-i-deploy --pacticipant StudentApi --version $GIT_COMMIT --broker-base-url $PACT_BROKER_BASE_URL --broker-token $PACT_BROKER_TOKEN
+          broker can-i-deploy \
+          --pacticipant StudentApi \
+          --version $GIT_COMMIT \
+          --to-environment stage \
+          --broker-base-url $PACT_BROKER_BASE_URL \
+          --broker-token $PACT_BROKER_TOKEN
 
+    - name: Record Provider Deployment in Stage
+      if: success()
+      run: |
+        docker run --rm \
+          pactfoundation/pact-cli:latest \
+          broker record-deployment \
+          --pacticipant StudentApi \
+          --version $GIT_COMMIT \
+          --environment stage \
+          --broker-base-url $PACT_BROKER_BASE_URL \
+          --broker-token $PACT_BROKER_TOKEN
+  
