@@ -93,7 +93,7 @@ jobs:
           --broker-token $PACT_BROKER_TOKEN
 
     - name: Record Provider Deployment in Stage
-      if: success()
+      if: always()
       run: |
         docker run --rm \
           pactfoundation/pact-cli:latest \
